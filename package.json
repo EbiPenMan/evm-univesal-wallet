@@ -7,12 +7,12 @@
     "url": "https://github.com/EbiPenMan"
   },
   "dependencies": {
-    "@openzeppelin/contracts": "^5.0.1"
   },
   "devDependencies": {
-    "forge-std": "github:foundry-rs/forge-std#v1.8.1",
+    "forge-std": "github:foundry-rs/forge-std#v1.8.2",
     "prettier": "^3.0.0",
-    "solhint": "^3.6.2"
+    "solhint": "^3.6.2",
+    "@prb/test": "^0.6.4"
   },
   "keywords": [
     "blockchain",
