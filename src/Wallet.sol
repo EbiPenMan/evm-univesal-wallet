@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.8.26;
+pragma solidity 0.8.26;
 
 // TODO
 // receive blockchain native token (Eth,Matic,BNB,...)
@@ -11,9 +11,8 @@ pragma solidity ^0.8.26;
 // withdraw ERC721
 
 import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import { ReentrancyGuardTransient } from "@openzeppelin/contracts/utils/ReentrancyGuardTransient.sol";
 
-contract Wallet is ReentrancyGuardTransient {
+contract Wallet {
     //  TODO get hash of unique string slot
     bytes32 constant SLOT = 0;
 
@@ -27,19 +26,20 @@ contract Wallet is ReentrancyGuardTransient {
     error FailedWithdrawCall(bytes);
     error ZeroAddress();
     error ZeroAmount();
+    error NotOwner();
 
     modifier OnlyOwner() {
-        require(msg.sender == owner);
+        require(msg.sender == owner, NotOwner());
         _;
     }
 
     modifier NotZeroAmount(uint256 val) {
-        if (val == 0) revert ZeroAmount();
+        require(val > 0, ZeroAmount());
         _;
     }
 
     modifier NotZeroAddress(address val) {
-        if (val == address(0)) revert ZeroAddress();
+        require(val != address(0), ZeroAddress());
         _;
     }
 
@@ -88,7 +88,7 @@ contract Wallet is ReentrancyGuardTransient {
     /// (2300 gas, throws error)
     function withdrawTransfer() external OnlyOwner {
         uint256 balance = address(this).balance;
-        if (balance <= 0) revert ZeroAmount();
+        require(balance > 0, ZeroAmount());
         payable(msg.sender).transfer(balance);
         emit OnWithdrawEth(msg.sender, balance);
     }
@@ -96,9 +96,9 @@ contract Wallet is ReentrancyGuardTransient {
     ///(2300 gas, returns bool)
     function withdrawSend() external OnlyOwner {
         uint256 balance = address(this).balance;
-        if (balance <= 0) revert ZeroAmount();
+        require(balance > 0, ZeroAmount());
         bool res = payable(msg.sender).send(balance);
-        if (!res) revert FailedWithdraw();
+        require(res , FailedWithdraw());
         emit OnWithdrawEth(msg.sender, balance);
     }
 
@@ -107,7 +107,7 @@ contract Wallet is ReentrancyGuardTransient {
         uint256 balance = address(this).balance;
         if (balance <= 0) revert ZeroAmount();
         (bool res, bytes memory data) = payable(msg.sender).call{ value: balance }(" ");
-        if (!res) revert FailedWithdrawCall(data);
+        require(res , FailedWithdrawCall(data));
         emit OnWithdrawEth(msg.sender, balance);
     }
 

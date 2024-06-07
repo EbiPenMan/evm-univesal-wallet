@@ -49,3 +49,18 @@ This project aims to develop an advanced wallet smart contract on the EVM-based 
 ## How to Use and Contribute
 
 For detailed technical documentation on how to set up the project for execution and contribute to its development, please refer to [this](/README-Use-Contribute.md) doc.
+
+
+## Tips
+- Minimum EVM version requirement:
+    - `Cancun` hardfork for `Transient Storage Opcodes`
+- Minimum solidity version: 0.8.26
+    - 0.8.26: Using custom errors with `require`
+    - 0.8.24: Transient Storage Opcodes ([EIP-1153](https://eips.ethereum.org/EIPS/eip-1153)) [Blog post](https://soliditylang.org/blog/2024/01/26/transient-storage/)
+- Build with `--via-ir` arg like: `forge build  --via-ir`
+    - reason: 
+        - `Using custom errors with require is only supported by the via IR pipeline, i.e. compilation via Yul`
+    - refrences: 
+        - [soliditylang-error-handling-revert-custom errors](https://docs.soliditylang.org/en/latest/control-structures.html#error-handling-assert-require-revert-and-exceptions)
+        - [All About the Via-Ir Pipeline](https://docs.tenderly.co/debugger/via-ir-pipeline)
+        - [Video `via IR` speedrun by Nikola Matić](https://youtu.be/3ljewa1__UM?list=PLX8x7Zj6VeznJuVkZtRyKwseJdrr4mNsE)

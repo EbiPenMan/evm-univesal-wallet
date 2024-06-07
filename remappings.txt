@@ -1,3 +1,6 @@
-@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/
+
 forge-std/=node_modules/forge-std/
 @prb/test/=node_modules/@prb/test/src/
+
+@openzeppelin/contracts/=lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/
+@openzeppelin/contracts-upgradeable/=lib/openzeppelin-contracts-upgradeable/contracts/
